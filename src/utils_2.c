@@ -6,59 +6,59 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:17:58 by eschmitz          #+#    #+#             */
-/*   Updated: 2024/09/03 15:28:45 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:27:17 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	push_swap(t_stack **stack_a, t_stack **stack_b, int stack_size)
+static void	execute_sorting_algorithm(t_stack **stack_a, t_stack **stack_b, int stack_size)
 {
-	if (stack_size == 2 && !is_sorted(*stack_a))
-		do_sa(stack_a);
+	if (stack_size == 2 && !is_stack_sorted(*stack_a))
+		swap_top_two(stack_a);
 	else if (stack_size == 3)
-		tiny_sort(stack_a);
-	else if (stack_size > 3 && !is_sorted(*stack_a))
-		sort(stack_a, stack_b);
+		sort_three_elements(stack_a);
+	else if (stack_size > 3 && !is_stack_sorted(*stack_a))
+		sort_large_stack(stack_a, stack_b);
 }
 
-void	exit_error_argv(t_stack **stack_a, t_stack **stack_b)
+void	handle_error_and_exit_simple(t_stack **stack_a, t_stack **stack_b)
 {
-	if (stack_a == NULL || *stack_a != NULL)
+	if (stack_a && *stack_a)
 		free_stack(stack_a);
-	if (stack_b == NULL || *stack_b != NULL)
+	if (stack_b && *stack_b)
 		free_stack(stack_b);
 	write(2, "Error\n", 6);
 	exit (1);
 }
 
-int	do_this_shit(int argc, char **av)
+int	execute_push_swap_single_arg(int argc, char **args)
 {
-	int		i;
+	int		arg_count;
 	t_stack	*stack_a;
 	t_stack	*stack_b;
 	int		stack_size;
 
-	i = 0;
-	if (!av || !av[1])
-		exit_error_argv(NULL, NULL);
-	while (av[i])
-		i++;
-	argc = i;
-	if (!is_correct_input(av))
-		exit_error(NULL, NULL, av);
+	arg_count = 0;
+	if (!args || !args[1])
+		handle_error_and_exit_simple(NULL, NULL);
+	while (args[arg_count])
+		arg_count++;
+	argc = arg_count;
+	if (!validate_input(args))
+		handle_error_and_exit(NULL, NULL, args);
 	stack_b = NULL;
-	stack_a = fill_stack_values(argc, av);
+	stack_a = create_stack_from_args(argc, args);
 	stack_size = get_stack_size(stack_a);
-	assign_index(stack_a, stack_size + 1);
-	push_swap(&stack_a, &stack_b, stack_size);
+	assign_sorted_indices(stack_a, stack_size + 1);
+	execute_sorting_algorithm(&stack_a, &stack_b, stack_size);
 	free_stack(&stack_a);
 	free_stack(&stack_b);
-	free_tab(av);
+	free_string_array(args);
 	return (0);
 }
 
-int	do_this_other_shit(int argc, char **argv)
+int	execute_push_swap_multiple_args(int argc, char **argv)
 {
 	t_stack	*stack_a;
 	t_stack	*stack_b;
@@ -66,13 +66,13 @@ int	do_this_other_shit(int argc, char **argv)
 
 	if (!argv || !argv[1])
 		exit(1);
-	if (!is_correct_input(argv))
-		exit_error_argv(NULL, NULL);
+	if (!validate_input(argv))
+		handle_error_and_exit_simple(NULL, NULL);
 	stack_b = NULL;
-	stack_a = fill_stack_values(argc, argv);
+	stack_a = create_stack_from_args(argc, argv);
 	stack_size = get_stack_size(stack_a);
-	assign_index(stack_a, stack_size + 1);
-	push_swap(&stack_a, &stack_b, stack_size);
+	assign_sorted_indices(stack_a, stack_size + 1);
+	execute_sorting_algorithm(&stack_a, &stack_b, stack_size);
 	free_stack(&stack_a);
 	free_stack(&stack_b);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:17:23 by eschmitz          #+#    #+#             */
-/*   Updated: 2024/09/03 15:19:54 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:26:58 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,45 +27,45 @@ void	free_stack(t_stack **stack)
 	*stack = NULL;
 }
 
-void	exit_error(t_stack **stack_a, t_stack **stack_b, char **av)
+void	handle_error_and_exit(t_stack **stack_a, t_stack **stack_b, char **args)
 {
-	if (stack_a == NULL || *stack_a != NULL)
+	if (stack_a && *stack_a)
 		free_stack(stack_a);
-	if (stack_b == NULL || *stack_b != NULL)
+	if (stack_b && *stack_b)
 		free_stack(stack_b);
-	if (av)
-		free_tab(av);
+	if (args)
+		free_string_array(args);
 	write(2, "Error\n", 6);
 	exit (1);
 }
 
 long int	ft_atoi(const char *str)
 {
-	long int	nb;
-	int			isneg;
+	long int	result;
+	int			sign;
 	int			i;
 
 	if (ft_strlen(str) >= 12)
-		exit_error_argv(NULL, NULL);
-	nb = 0;
-	isneg = 1;
+		handle_error_and_exit(NULL, NULL, NULL);
+	result = 0;
+	sign = 1;
 	i = 0;
 	while (str[i] == ' ')
 		i++;
 	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
-			isneg *= -1;
+			sign = -1;
 		i++;
 	}
 	while (is_digit(str[i]))
 	{
-		nb = (nb * 10) + (str[i] - '0');
+		result = (result * 10) + (str[i] - '0');
 		i++;
 	}
-	if (nb * isneg > 2147483647 || nb * isneg < -2147483648)
-		exit_error_argv(NULL, NULL);
-	return (nb * isneg);
+	if (result * sign > INT_MAX || result * sign < INT_MIN)
+		handle_error_and_exit(NULL, NULL, NULL);
+	return (result * sign);
 }
 
 void	ft_putstr(char *str)
@@ -80,7 +80,7 @@ void	ft_putstr(char *str)
 	}
 }
 
-int	nb_abs(int nb)
+int	get_absolute_value(int nb)
 {
 	if (nb < 0)
 		return (nb * -1);

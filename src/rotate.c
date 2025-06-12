@@ -6,39 +6,41 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:11:57 by eschmitz          #+#    #+#             */
-/*   Updated: 2024/08/15 16:38:08 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:28:14 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	rotate(t_stack **stack)
+static void	rotate_stack_up(t_stack **stack)
 {
-	t_stack	*tmp;
-	t_stack	*tail;
+	t_stack	*first_element;
+	t_stack	*last_element;
 
-	tmp = *stack;
+	if (!*stack || !(*stack)->next)
+		return ;
+	first_element = *stack;
 	*stack = (*stack)->next;
-	tail = get_stack_bottom(*stack);
-	tmp->next = NULL;
-	tail->next = tmp;
+	last_element = get_stack_bottom(*stack);
+	first_element->next = NULL;
+	last_element->next = first_element;
 }
 
-void	do_ra(t_stack **stack_a)
+void	rotate_stack_a_up(t_stack **stack_a)
 {
-	rotate(stack_a);
+	rotate_stack_up(stack_a);
 	ft_putstr("ra\n");
 }
 
-void	do_rb(t_stack **stack_b)
+void	rotate_stack_b_up(t_stack **stack_b)
 {
-	rotate(stack_b);
+	rotate_stack_up(stack_b);
 	ft_putstr("rb\n");
 }
 
-void	do_rr(t_stack **stack_a, t_stack **stack_b)
+void	rotate_both_stacks_up(t_stack **stack_a, t_stack **stack_b)
 {
-	rotate(stack_a);
-	rotate(stack_b);
+	rotate_stack_up(stack_a);
+	rotate_stack_up(stack_b);
 	ft_putstr("rr\n");
 }

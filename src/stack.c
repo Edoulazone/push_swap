@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:22:59 by eschmitz          #+#    #+#             */
-/*   Updated: 2024/08/15 16:37:57 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:32:53 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_stack	*get_stack_before_bottom(t_stack *stack)
 	return (stack);
 }
 
-t_stack	*stack_new(int value)
+t_stack	*create_new_stack_node(int value)
 {
 	t_stack	*new;
 
@@ -43,7 +43,7 @@ t_stack	*stack_new(int value)
 	return (new);
 }
 
-void	stack_add_bottom(t_stack **stack, t_stack *new)
+void	add_node_to_stack_bottom(t_stack **stack, t_stack *new)
 {
 	t_stack	*tail;
 

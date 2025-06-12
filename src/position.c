@@ -6,92 +6,92 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:57:31 by eschmitz          #+#    #+#             */
-/*   Updated: 2024/08/15 16:38:20 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:29:49 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	get_position(t_stack **stack)
+static void	update_element_positions(t_stack **stack)
 {
-	t_stack	*tmp;
-	int		i;
+	t_stack	*current;
+	int		position;
 
-	tmp = *stack;
-	i = 0;
-	while (tmp)
+	current = *stack;
+	position = 0;
+	while (current)
 	{
-		tmp->pos = i;
-		tmp = tmp->next;
-		i++;
+		current->pos = position;
+		current = current->next;
+		position++;
 	}
 }
 
-int	get_lowest_index_position(t_stack **stack)
+int	find_smallest_element_position(t_stack **stack)
 {
-	t_stack	*tmp;
-	int		lowest_index;
-	int		lowest_pos;
+	t_stack	*current;
+	int		smallest_index;
+	int		smallest_position;
 
-	tmp = *stack;
-	lowest_index = INT_MAX;
-	get_position(stack);
-	lowest_pos = tmp->pos;
-	while (tmp)
+	current = *stack;
+	smallest_index = INT_MAX;
+	update_element_positions(stack);
+	smallest_position = current->pos;
+	while (current)
 	{
-		if (tmp->index < lowest_index)
+		if (current->index < smallest_index)
 		{
-			lowest_index = tmp->index;
-			lowest_pos = tmp->pos;
+			smallest_index = current->index;
+			smallest_position = current->pos;
 		}
-		tmp = tmp->next;
+		current = current->next;
 	}
-	return (lowest_pos);
+	return (smallest_position);
 }
 
-static int	get_target(t_stack **a, int b_idx,
-								int target_idx, int target_pos)
+static int	find_optimal_target_position(t_stack **stack_a, int element_index,
+								int target_index, int target_position)
 {
-	t_stack	*tmp_a;
+	t_stack	*current_a;
 
-	tmp_a = *a;
-	while (tmp_a)
+	current_a = *stack_a;
+	while (current_a)
 	{
-		if (tmp_a->index > b_idx && tmp_a->index < target_idx)
+		if (current_a->index > element_index && current_a->index < target_index)
 		{
-			target_idx = tmp_a->index;
-			target_pos = tmp_a->pos;
+			target_index = current_a->index;
+			target_position = current_a->pos;
 		}
-		tmp_a = tmp_a->next;
+		current_a = current_a->next;
 	}
-	if (target_idx != INT_MAX)
-		return (target_pos);
-	tmp_a = *a;
-	while (tmp_a)
+	if (target_index != INT_MAX)
+		return (target_position);
+	current_a = *stack_a;
+	while (current_a)
 	{
-		if (tmp_a->index < target_idx)
+		if (current_a->index < target_index)
 		{
-			target_idx = tmp_a->index;
-			target_pos = tmp_a->pos;
+			target_index = current_a->index;
+			target_position = current_a->pos;
 		}
-		tmp_a = tmp_a->next;
+		current_a = current_a->next;
 	}
-	return (target_pos);
+	return (target_position);
 }
 
-void	get_target_position(t_stack **a, t_stack **b)
+void	calculate_target_positions(t_stack **stack_a, t_stack **stack_b)
 {
-	t_stack	*tmp_b;
-	int		target_pos;
+	t_stack	*current_b;
+	int		target_position;
 
-	tmp_b = *b;
-	get_position(a);
-	get_position(b);
-	target_pos = 0;
-	while (tmp_b)
+	current_b = *stack_b;
+	update_element_positions(stack_a);
+	update_element_positions(stack_b);
+	target_position = 0;
+	while (current_b)
 	{
-		target_pos = get_target(a, tmp_b->index, INT_MAX, target_pos);
-		tmp_b->target_pos = target_pos;
-		tmp_b = tmp_b->next;
+		target_position = find_optimal_target_position(stack_a, current_b->index, INT_MAX, target_position);
+		current_b->target_pos = target_position;
+		current_b = current_b->next;
 	}
 }

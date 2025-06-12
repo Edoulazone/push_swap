@@ -6,32 +6,32 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:03:22 by eschmitz          #+#    #+#             */
-/*   Updated: 2024/08/15 16:38:16 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:28:03 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	push(t_stack **src, t_stack **dest)
+static void	push_element(t_stack **source, t_stack **destination)
 {
-	t_stack	*tmp;
+	t_stack	*temp;
 
-	if (*src == NULL)
+	if (*source == NULL)
 		return ;
-	tmp = (*src)->next;
-	(*src)->next = *dest;
-	*dest = *src;
-	*src = tmp;
+	temp = (*source)->next;
+	(*source)->next = *destination;
+	*destination = *source;
+	*source = temp;
 }
 
-void	do_pa(t_stack **stack_a, t_stack **stack_b)
+void	push_to_stack_a(t_stack **stack_a, t_stack **stack_b)
 {
-	push(stack_b, stack_a);
+	push_element(stack_b, stack_a);
 	ft_putstr("pa\n");
 }
 
-void	do_pb(t_stack **stack_a, t_stack **stack_b)
+void	push_to_stack_b(t_stack **stack_a, t_stack **stack_b)
 {
-	push(stack_a, stack_b);
+	push_element(stack_a, stack_b);
 	ft_putstr("pb\n");
 }

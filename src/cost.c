@@ -6,53 +6,53 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:13:47 by eschmitz          #+#    #+#             */
-/*   Updated: 2024/08/15 16:38:41 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:29:27 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	get_cost(t_stack **stack_a, t_stack **stack_b)
+void	calculate_movement_costs(t_stack **stack_a, t_stack **stack_b)
 {
-	t_stack	*tmp_a;
-	t_stack	*tmp_b;
+	t_stack	*current_b;
+	t_stack	*current_a;
 	int		size_a;
 	int		size_b;
 
-	tmp_a = *stack_a;
-	tmp_b = *stack_b;
-	size_a = get_stack_size(tmp_a);
-	size_b = get_stack_size(tmp_b);
-	while (tmp_b)
+	current_a = *stack_a;
+	current_b = *stack_b;
+	size_a = get_stack_size(current_a);
+	size_b = get_stack_size(current_b);
+	while (current_b)
 	{
-		tmp_b->cost_b = tmp_b->pos;
-		if (tmp_b->pos > size_b / 2)
-			tmp_b->cost_b = (size_b - tmp_b->pos) * -1;
-		tmp_b->cost_a = tmp_b->target_pos;
-		if (tmp_b->target_pos > size_a / 2)
-			tmp_b->cost_a = (size_a - tmp_b->target_pos) * -1;
-		tmp_b = tmp_b->next;
+		current_b->cost_b = current_b->pos;
+		if (current_b->pos > size_b / 2)
+			current_b->cost_b = (size_b - current_b->pos) * -1;
+		current_b->cost_a = current_b->target_pos;
+		if (current_b->target_pos > size_a / 2)
+			current_b->cost_a = (size_a - current_b->target_pos) * -1;
+		current_b = current_b->next;
 	}
 }
 
-void	do_cheapest_move(t_stack **stack_a, t_stack **stack_b)
+void	execute_most_efficient_move(t_stack **stack_a, t_stack **stack_b)
 {
-	t_stack	*tmp;
-	int		cheapest;
-	int		cost_a;
-	int		cost_b;
+	t_stack	*current;
+	int		lowest_cost;
+	int		optimal_cost_a;
+	int		optimal_cost_b;
 
-	tmp = *stack_b;
-	cheapest = INT_MAX;
-	while (tmp)
+	current = *stack_b;
+	lowest_cost = INT_MAX;
+	while (current)
 	{
-		if (nb_abs(tmp->cost_a) + nb_abs(tmp->cost_b) < nb_abs(cheapest))
+		if (get_absolute_value(current->cost_a) + get_absolute_value(current->cost_b) < get_absolute_value(lowest_cost))
 		{
-			cheapest = nb_abs(tmp->cost_b) + nb_abs(tmp->cost_a);
-			cost_a = tmp->cost_a;
-			cost_b = tmp->cost_b;
+			lowest_cost = get_absolute_value(current->cost_b) + get_absolute_value(current->cost_a);
+			optimal_cost_a = current->cost_a;
+			optimal_cost_b = current->cost_b;
 		}
-		tmp = tmp->next;
+		current = current->next;
 	}
-	do_move(stack_a, stack_b, cost_a, cost_b);
+	execute_move_sequence(stack_a, stack_b, optimal_cost_a, optimal_cost_b);
 }
