@@ -6,30 +6,28 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:17:58 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/12 17:27:17 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:40:06 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	execute_sorting_algorithm(t_stack **stack_a, t_stack **stack_b, int stack_size)
+static void	execute_sorting_algorithm(t_stack **stack_a, t_stack **stack_b,
+		int stack_size)
 {
-	if (stack_size == 2 && !is_stack_sorted(*stack_a))
-		swap_top_two(stack_a);
+	if (stack_size <= 1 || is_stack_sorted(*stack_a))
+		return ;
+	if (stack_size == 2)
+	{
+		if ((*stack_a)->value > (*stack_a)->next->value)
+			swap_top_two(stack_a);
+	}
 	else if (stack_size == 3)
 		sort_three_elements(stack_a);
-	else if (stack_size > 3 && !is_stack_sorted(*stack_a))
-		sort_large_stack(stack_a, stack_b);
-}
-
-void	handle_error_and_exit_simple(t_stack **stack_a, t_stack **stack_b)
-{
-	if (stack_a && *stack_a)
-		free_stack(stack_a);
-	if (stack_b && *stack_b)
-		free_stack(stack_b);
-	write(2, "Error\n", 6);
-	exit (1);
+	else if (stack_size <= 5)
+		sort_small_stack_optimized(stack_a);
+	else
+		enhanced_sort_large_stack(stack_a, stack_b);
 }
 
 int	execute_push_swap_single_arg(int argc, char **args)
@@ -45,12 +43,17 @@ int	execute_push_swap_single_arg(int argc, char **args)
 	while (args[arg_count])
 		arg_count++;
 	argc = arg_count;
-	if (!validate_input(args))
+	if (!enhanced_validate_input(args))
 		handle_error_and_exit(NULL, NULL, args);
+	if (is_input_already_sorted(args))
+	{
+		free_string_array(args);
+		return (0);
+	}
 	stack_b = NULL;
 	stack_a = create_stack_from_args(argc, args);
 	stack_size = get_stack_size(stack_a);
-	assign_sorted_indices(stack_a, stack_size + 1);
+	optimized_assign_indices(stack_a);
 	execute_sorting_algorithm(&stack_a, &stack_b, stack_size);
 	free_stack(&stack_a);
 	free_stack(&stack_b);
@@ -66,12 +69,14 @@ int	execute_push_swap_multiple_args(int argc, char **argv)
 
 	if (!argv || !argv[1])
 		exit(1);
-	if (!validate_input(argv))
+	if (!enhanced_validate_input(argv))
 		handle_error_and_exit_simple(NULL, NULL);
+	if (is_input_already_sorted(argv))
+		return (0);
 	stack_b = NULL;
 	stack_a = create_stack_from_args(argc, argv);
 	stack_size = get_stack_size(stack_a);
-	assign_sorted_indices(stack_a, stack_size + 1);
+	optimized_assign_indices(stack_a);
 	execute_sorting_algorithm(&stack_a, &stack_b, stack_size);
 	free_stack(&stack_a);
 	free_stack(&stack_b);

@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:57:31 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/12 17:29:49 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:41:57 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ void	calculate_target_positions(t_stack **stack_a, t_stack **stack_b)
 	target_position = 0;
 	while (current_b)
 	{
-		target_position = find_optimal_target_position(stack_a, current_b->index, INT_MAX, target_position);
+		target_position = find_optimal_target_position(stack_a,
+				current_b->index, INT_MAX, target_position);
 		current_b->target_pos = target_position;
 		current_b = current_b->next;
 	}

@@ -6,36 +6,37 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 15:21:03 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/12 17:28:52 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:41:08 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	move_elements_to_stack_b(t_stack **stack_a, t_stack **stack_b)
+static void	push_elements_in_chunks(t_stack **stack_a, t_stack **stack_b)
 {
 	int	stack_size;
-	int	elements_moved;
-	int	operations_count;
+	int	chunk_size;
+	int	elements_pushed;
+	int	current_chunk;
 
 	stack_size = get_stack_size(*stack_a);
-	elements_moved = 0;
-	operations_count = 0;
-	while (stack_size > 6 && operations_count < stack_size && elements_moved < stack_size / 2)
+	chunk_size = stack_size / 3;
+	elements_pushed = 0;
+	current_chunk = 1;
+	while (get_stack_size(*stack_a) > 3)
 	{
-		if ((*stack_a)->index <= stack_size / 2)
+		if ((*stack_a)->index <= chunk_size * current_chunk)
 		{
 			push_to_stack_b(stack_a, stack_b);
-			elements_moved++;
+			elements_pushed++;
+			if (elements_pushed >= chunk_size && current_chunk < 3)
+			{
+				current_chunk++;
+				elements_pushed = 0;
+			}
 		}
 		else
 			rotate_stack_a_up(stack_a);
-		operations_count++;
-	}
-	while (stack_size - elements_moved > 3)
-	{
-		push_to_stack_b(stack_a, stack_b);
-		elements_moved++;
 	}
 }
 
@@ -64,16 +65,57 @@ static void	position_smallest_element_on_top(t_stack **stack_a)
 	}
 }
 
-void	sort_large_stack(t_stack **stack_a, t_stack **stack_b)
+void	enhanced_sort_large_stack(t_stack **stack_a, t_stack **stack_b)
 {
-	move_elements_to_stack_b(stack_a, stack_b);
+	push_elements_in_chunks(stack_a, stack_b);
 	sort_three_elements(stack_a);
 	while (*stack_b)
 	{
 		calculate_target_positions(stack_a, stack_b);
-		calculate_movement_costs(stack_a, stack_b);
-		execute_most_efficient_move(stack_a, stack_b);
+		enhanced_calculate_costs(stack_a, stack_b);
+		find_optimal_move(stack_a, stack_b);
 	}
 	if (!is_stack_sorted(*stack_a))
 		position_smallest_element_on_top(stack_a);
+}
+
+static void	move_min_to_stack_b(t_stack **stack_a, t_stack **stack_b, int size)
+{
+	int	min_pos;
+
+	min_pos = find_smallest_element_position(stack_a);
+	if (min_pos <= size / 2)
+	{
+		while (min_pos > 0)
+		{
+			rotate_stack_a_up(stack_a);
+			min_pos--;
+		}
+	}
+	else
+	{
+		while (min_pos < size)
+		{
+			rotate_stack_a_down(stack_a);
+			min_pos++;
+		}
+	}
+	push_to_stack_b(stack_a, stack_b);
+}
+
+void	sort_small_stack_optimized(t_stack **stack_a)
+{
+	t_stack	*stack_b;
+	int		size;
+
+	stack_b = NULL;
+	size = get_stack_size(*stack_a);
+	while (size > 3)
+	{
+		move_min_to_stack_b(stack_a, &stack_b, size);
+		size--;
+	}
+	sort_three_elements(stack_a);
+	while (stack_b)
+		push_to_stack_a(stack_a, &stack_b);
 }

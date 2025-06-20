@@ -6,49 +6,82 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:13:47 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/12 17:29:27 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:44:10 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	calculate_movement_costs(t_stack **stack_a, t_stack **stack_b)
+static int	calculate_rotation_cost(int position, int stack_size)
+{
+	int	forward_cost;
+	int	backward_cost;
+
+	forward_cost = position;
+	backward_cost = stack_size - position;
+	if (forward_cost <= backward_cost)
+		return (forward_cost);
+	return (-backward_cost);
+}
+
+void	enhanced_calculate_costs(t_stack **stack_a, t_stack **stack_b)
 {
 	t_stack	*current_b;
-	t_stack	*current_a;
 	int		size_a;
 	int		size_b;
 
-	current_a = *stack_a;
 	current_b = *stack_b;
-	size_a = get_stack_size(current_a);
-	size_b = get_stack_size(current_b);
+	size_a = get_stack_size(*stack_a);
+	size_b = get_stack_size(*stack_b);
 	while (current_b)
 	{
-		current_b->cost_b = current_b->pos;
-		if (current_b->pos > size_b / 2)
-			current_b->cost_b = (size_b - current_b->pos) * -1;
-		current_b->cost_a = current_b->target_pos;
-		if (current_b->target_pos > size_a / 2)
-			current_b->cost_a = (size_a - current_b->target_pos) * -1;
+		current_b->cost_a = calculate_rotation_cost(current_b->target_pos,
+				size_a);
+		current_b->cost_b = calculate_rotation_cost(current_b->pos, size_b);
 		current_b = current_b->next;
 	}
 }
 
-void	execute_most_efficient_move(t_stack **stack_a, t_stack **stack_b)
+static int	calculate_move_cost(int cost_a, int cost_b)
+{
+	int	abs_a;
+	int	abs_b;
+
+	abs_a = get_absolute_value(cost_a);
+	abs_b = get_absolute_value(cost_b);
+	if ((cost_a > 0 && cost_b > 0) || (cost_a < 0 && cost_b < 0))
+	{
+		if (abs_a > abs_b)
+			return (abs_a);
+		return (abs_b);
+	}
+	return (abs_a + abs_b);
+}
+
+void	find_optimal_move(t_stack **stack_a, t_stack **stack_b)
 {
 	t_stack	*current;
-	int		lowest_cost;
+	int		min_cost;
 	int		optimal_cost_a;
 	int		optimal_cost_b;
+	int		current_cost;
 
 	current = *stack_b;
-	lowest_cost = INT_MAX;
+	min_cost = INT_MAX;
+	optimal_cost_a = 0;
+	optimal_cost_b = 0;
 	while (current)
 	{
-		if (get_absolute_value(current->cost_a) + get_absolute_value(current->cost_b) < get_absolute_value(lowest_cost))
+		current_cost = calculate_move_cost(current->cost_a, current->cost_b);
+		if (current_cost < 3)
 		{
-			lowest_cost = get_absolute_value(current->cost_b) + get_absolute_value(current->cost_a);
+			optimal_cost_a = current->cost_a;
+			optimal_cost_b = current->cost_b;
+			break ;
+		}
+		if (current_cost < min_cost)
+		{
+			min_cost = current_cost;
 			optimal_cost_a = current->cost_a;
 			optimal_cost_b = current->cost_b;
 		}

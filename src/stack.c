@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:22:59 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/12 17:32:53 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:40:17 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,12 @@ t_stack	*create_new_stack_node(int value)
 {
 	t_stack	*new;
 
-	new = malloc(sizeof * new);
+	new = malloc(sizeof(t_stack));
 	if (!new)
-		return (NULL);
+	{
+		write(2, "Error: Memory allocation failed\n", 32);
+		exit(1);
+	}
 	new->value = value;
 	new->index = 0;
 	new->pos = -1;

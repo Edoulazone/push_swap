@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:17:23 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/12 17:26:58 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:39:52 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,17 @@ void	handle_error_and_exit(t_stack **stack_a, t_stack **stack_b, char **args)
 	if (args)
 		free_string_array(args);
 	write(2, "Error\n", 6);
-	exit (1);
+	exit(1);
+}
+
+void	handle_error_and_exit_simple(t_stack **stack_a, t_stack **stack_b)
+{
+	if (stack_a && *stack_a)
+		free_stack(stack_a);
+	if (stack_b && *stack_b)
+		free_stack(stack_b);
+	write(2, "Error\n", 6);
+	exit(1);
 }
 
 long int	ft_atoi(const char *str)
@@ -46,7 +56,7 @@ long int	ft_atoi(const char *str)
 	int			i;
 
 	if (ft_strlen(str) >= 12)
-		handle_error_and_exit(NULL, NULL, NULL);
+		handle_error_and_exit_simple(NULL, NULL);
 	result = 0;
 	sign = 1;
 	i = 0;
@@ -64,7 +74,7 @@ long int	ft_atoi(const char *str)
 		i++;
 	}
 	if (result * sign > INT_MAX || result * sign < INT_MIN)
-		handle_error_and_exit(NULL, NULL, NULL);
+		handle_error_and_exit_simple(NULL, NULL);
 	return (result * sign);
 }
 

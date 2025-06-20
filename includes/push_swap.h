@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:18:32 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/12 17:31:54 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:06:07 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,23 @@ typedef struct s_stack
 
 /* Stack initialization and setup */
 t_stack		*create_stack_from_args(int argc, char **argv);
-void		assign_sorted_indices(t_stack *stack_a, int stack_size);
+void		optimized_assign_indices(t_stack *stack_a);
 
 /* Sorting algorithms */
 int			is_stack_sorted(t_stack *stack);
 void		sort_three_elements(t_stack **stack);
-void		sort_large_stack(t_stack **stack_a, t_stack **stack_b);
+void		enhanced_sort_large_stack(t_stack **stack_a, t_stack **stack_b);
+void		sort_small_stack_optimized(t_stack **stack_a);
 
 /* Position and target calculations */
 int			find_smallest_element_position(t_stack **stack);
 void		calculate_target_positions(t_stack **stack_a, t_stack **stack_b);
 
 /* Cost calculation and move execution */
-void		calculate_movement_costs(t_stack **stack_a, t_stack **stack_b);
-void		execute_most_efficient_move(t_stack **stack_a, t_stack **stack_b);
-void		execute_move_sequence(t_stack **a, t_stack **b, int cost_a, int cost_b);
+void		enhanced_calculate_costs(t_stack **stack_a, t_stack **stack_b);
+void		find_optimal_move(t_stack **stack_a, t_stack **stack_b);
+void		execute_move_sequence(t_stack **a, t_stack **b, int cost_a,
+				int cost_b);
 
 /* Stack operations - Push */
 void		push_to_stack_a(t_stack **stack_a, t_stack **stack_b);
@@ -76,11 +78,13 @@ int			get_stack_size(t_stack	*stack);
 
 /* Memory management and error handling */
 void		free_stack(t_stack **stack);
-void		handle_error_and_exit(t_stack **stack_a, t_stack **stack_b, char **args);
+void		handle_error_and_exit(t_stack **stack_a, t_stack **stack_b,
+				char **args);
 void		handle_error_and_exit_simple(t_stack **stack_a, t_stack **stack_b);
 
 /* Input validation */
-int			validate_input(char **argv);
+int			enhanced_validate_input(char **argv);
+int			is_input_already_sorted(char **argv);
 int			is_digit(char c);
 int			is_sign(char c);
 
@@ -98,5 +102,80 @@ void		free_string_array(char **array);
 
 /* String splitting utility */
 char		**ft_split(char *s, char c);
+
+/* Enhanced sorting strategies */
+void    enhanced_push_elements_to_stack_b(t_stack **stack_a, t_stack **stack_b);
+void    chunked_distribution(t_stack **stack_a, t_stack **stack_b);
+void    adaptive_distribution(t_stack **stack_a, t_stack **stack_b);
+int     find_longest_increasing_subsequence(t_stack *stack);
+
+/* Enhanced cost analysis */
+void    enhanced_calculate_move_costs(t_stack **stack_a, t_stack **stack_b);
+void    enhanced_execute_cheapest_move(t_stack **stack_a, t_stack **stack_b);
+int     find_enhanced_target_position(t_stack **stack_a, int b_index);
+
+/* Adaptive sorting */
+void    adaptive_execute_sort(t_stack **stack_a, t_stack **stack_b);
+
+/* Testing functions */
+void    compare_strategies(t_stack *test_stack);
+void    run_comprehensive_tests(void);
+t_stack *generate_random_stack(int size);
+t_stack *copy_stack(t_stack *original);
+
+/* ========== OPERATION OPTIMIZER STRUCTURES ========== */
+
+/* Operation list node for recording operations */
+typedef struct s_op_node
+{
+	char				*operation;
+	struct s_op_node	*next;
+}	t_op_node;
+
+/* ========== OPERATION OPTIMIZER FUNCTIONS ========== */
+
+/* Core optimization functions */
+void    enable_optimization_mode(void);
+void    disable_optimization_mode(void);
+void    record_operation(const char *op);
+void    optimized_ft_putstr(const char *str);
+void    output_optimized_operations(int stack_size_a, int stack_size_b);
+void    free_operation_list(void);
+
+/* String utility functions for optimizer */
+int     ft_strcmp(const char *s1, const char *s2);
+char    *ft_strdup(const char *s);
+
+/* Optimization utility functions */
+int     count_consecutive_ops(t_op_node *start, const char *op_type);
+void    remove_duplicate_swaps(void);
+void    combine_simultaneous_rotations(void);
+void    apply_optimizations(int stack_size_a, int stack_size_b);
+
+/* Optimized stack operations */
+void    optimized_sa(t_stack **stack_a);
+void    optimized_sb(t_stack **stack_b);
+void    optimized_pa(t_stack **stack_a, t_stack **stack_b);
+void    optimized_pb(t_stack **stack_a, t_stack **stack_b);
+void    optimized_ra(t_stack **stack_a);
+void    optimized_rb(t_stack **stack_b);
+void    optimized_rra(t_stack **stack_a);
+void    optimized_rrb(t_stack **stack_b);
+
+/* Optimized sorting functions */
+void    optimized_execute_sort(t_stack **stack_a, t_stack **stack_b);
+void    optimized_sort_two(t_stack **stack_a);
+void    optimized_sort_three(t_stack **stack_a);
+void    optimized_push_elements_to_stack_b(t_stack **stack_a, t_stack **stack_b);
+void    optimized_sort_remaining_elements(t_stack **stack_a);
+void    optimized_optimize_stack_placement(t_stack **stack_a, t_stack **stack_b);
+void    optimized_execute_cheapest_move(t_stack **stack_a, t_stack **stack_b);
+void    optimized_execute_move(t_stack **stack_a, t_stack **stack_b, int cost_a, int cost_b);
+void    optimized_rotate_both_stacks(t_stack **stack_a, t_stack **stack_b, int *cost_a, int *cost_b);
+void    optimized_reverse_rotate_both_stacks(t_stack **stack_a, t_stack **stack_b, int *cost_a, int *cost_b);
+void    optimized_rotate_stack_to_position(t_stack **stack, int *cost, 
+                                          void (*rotate)(t_stack**), 
+                                          void (*reverse_rotate)(t_stack**));
+void    optimized_position_stack_minimum(t_stack **stack_a);
 
 #endif
