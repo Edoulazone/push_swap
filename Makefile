@@ -2,17 +2,32 @@ CC		= cc
 CFLAGS	= -Wall -Werror -Wextra #-fsanitize=address -g
 NAME	= push_swap
 
-SRC_PATH = src/
+SRC_PATH = srcs/
 OBJ_PATH = obj/
 
-SRC		= main.c \
-		input_check.c \
-		initialization.c \
-		stack.c \
-		swap.c push.c rotate.c reverse_rotate.c \
-		sort_tiny.c sort.c \
-		position.c cost.c move.c \
-		utils.c split.c utils_2.c
+SRC = 	main.c \
+		parsing.c \
+		parsing_utils.c \
+		split.c \
+		utils.c \
+		utils_2.c \
+		stack_operations.c \
+		basic_operations.c \
+		push_operations.c \
+		rotate_operations.c \
+		reverse_rotate_operations.c \
+		stack_analysis.c \
+		sorting.c \
+		sorting_large.c \
+		cost_calculation.c \
+		cost_calculation_utils.c \
+		move_execution.c \
+		advanced_cost.c \
+		advanced_cost_utils.c \
+		pattern_detection.c \
+		pattern_detection_utils.c \
+		move_optimization.c \
+		move_optimization_utils.c
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 
