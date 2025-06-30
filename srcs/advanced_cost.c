@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 16:00:00 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/29 17:41:56 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:27:22 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,20 @@ int	calculate_combined_cost(int cost_a, int cost_b)
 	int	abs_a;
 	int	abs_b;
 
-	abs_a = (cost_a < 0) ? -cost_a : cost_a;
-	abs_b = (cost_b < 0) ? -cost_b : cost_b;
+	if (cost_a < 0)
+		abs_a = -cost_a;
+	else
+		abs_a = cost_a;
+	if (cost_b < 0)
+		abs_b = -cost_b;
+	else
+		abs_b = cost_b;
 	if ((cost_a >= 0 && cost_b >= 0) || (cost_a < 0 && cost_b < 0))
 	{
-		return ((abs_a > abs_b) ? abs_a : abs_b);
+		if (abs_a > abs_b)
+			return (abs_a);
+		else
+			return (abs_b);
 	}
 	return (abs_a + abs_b);
 }

@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:18:32 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/29 17:41:46 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:30:17 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@ typedef struct s_stack
 	t_node	*top;
 	int		size;
 }	t_stack;
+
+typedef struct s_batch_context
+{
+	t_stack	*a;
+	t_stack	*b;
+	t_node	**best_batch;
+	int		*best_size;
+	int		*best_cost;
+}	t_batch_context;
 
 /* Stack operations */
 t_stack		*stack_init(void);

@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 17:36:00 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/29 17:36:09 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:30:56 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ static void	update_best_batch(t_node **best_batch, int *best_size,
 	}
 }
 
-static void	find_optimal_batch_helper(t_stack *a, t_stack *b, t_node *current,
-		t_node **best_batch, int *best_size, int *best_cost)
+static void	find_optimal_batch_helper(t_batch_context *ctx, t_node *current)
 {
 	t_node	*batch[4];
 	int		batch_size;
@@ -63,11 +62,12 @@ static void	find_optimal_batch_helper(t_stack *a, t_stack *b, t_node *current,
 	{
 		batch[batch_size] = batch[batch_size - 1]->next;
 		batch_size++;
-		current_cost = calculate_batch_cost(a, b, batch, batch_size);
-		if (current_cost < *best_cost)
+		current_cost = calculate_batch_cost(ctx->a, ctx->b, batch, batch_size);
+		if (current_cost < *(ctx->best_cost))
 		{
-			*best_cost = current_cost;
-			update_best_batch(best_batch, best_size, batch, batch_size);
+			*(ctx->best_cost) = current_cost;
+			update_best_batch(ctx->best_batch, ctx->best_size,
+				batch, batch_size);
 		}
 	}
 }
@@ -75,17 +75,22 @@ static void	find_optimal_batch_helper(t_stack *a, t_stack *b, t_node *current,
 static void	find_optimal_batch(t_stack *a, t_stack *b, t_node **best_batch,
 		int *best_size)
 {
-	t_node	*current;
-	int		best_cost;
+	t_batch_context	ctx;
+	t_node			*current;
+	int				best_cost;
 
 	*best_size = 1;
 	best_batch[0] = find_cheapest(b);
 	best_cost = best_batch[0]->push_cost;
+	ctx.a = a;
+	ctx.b = b;
+	ctx.best_batch = best_batch;
+	ctx.best_size = best_size;
+	ctx.best_cost = &best_cost;
 	current = b->top;
 	while (current && current->next)
 	{
-		find_optimal_batch_helper(a, b, current, best_batch, best_size,
-			&best_cost);
+		find_optimal_batch_helper(&ctx, current);
 		current = current->next;
 	}
 }
