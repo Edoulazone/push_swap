@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:32:14 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/29 17:41:36 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/07/01 15:40:29 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ void	ra(t_stack *a)
 {
 	rotate_stack(a);
 	ft_putstr("ra\n");
+}
+
+void	rap(t_stack *a)
+{
+	rotate_stack(a);
 }
 
 void	rb(t_stack *b)

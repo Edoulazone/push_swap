@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:32:26 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/29 17:07:27 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/07/01 15:41:02 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	validate_and_add_number(char *str, t_stack *stack_a)
 	if (!node)
 		return (0);
 	stack_push(stack_a, node);
+	rap(stack_a);
 	return (1);
 }
 
@@ -34,6 +35,7 @@ static int	parse_single_arg(char *arg, t_stack *stack_a)
 	char	**numbers;
 	int		i;
 
+	
 	numbers = ft_split(arg, ' ');
 	if (!numbers)
 		return (0);

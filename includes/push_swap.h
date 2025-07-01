@@ -6,7 +6,7 @@
 /*   By: eschmitz <eschmitz@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:18:32 by eschmitz          #+#    #+#             */
-/*   Updated: 2025/06/30 20:30:17 by eschmitz         ###   ########.fr       */
+/*   Updated: 2025/07/01 15:44:53 by eschmitz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void		rr(t_stack *a, t_stack *b);
 void		rra(t_stack *a);
 void		rrb(t_stack *b);
 void		rrr(t_stack *a, t_stack *b);
+void		rap(t_stack *a); //Rotate for parsing
 
 /* Parsing */
 int			parse_arguments(int argc, char **argv, t_stack *stack_a);
